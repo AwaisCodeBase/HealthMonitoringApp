@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sensory Control</string>
+    
+    <!-- Firebase Google Sign-In Web Client ID -->
+    <!-- This is automatically generated from google-services.json by the Google Services plugin -->
+    <!-- To enable Google Sign-In:
+         1. Go to Firebase Console > Authentication > Sign-in method
+         2. Enable Google Sign-In
+         3. Go to Project Settings > Your apps > Download google-services.json
+         4. Replace app/google-services.json with the new file
+         5. Add your SHA-1 fingerprint to Firebase (see GOOGLE_SIGNIN_SETUP.md)
+         6. Rebuild the app
+    -->
+    <string name="default_web_client_id" translatable="false">680374870007-YOUR_CLIENT_ID.apps.googleusercontent.com</string>
+    
+    <!-- Navigation -->
+    <string name="nav_control">Control</string>
+    <string name="nav_scan">Scan</string>
+    <string name="nav_modes">Modes</string>
+    <string name="nav_settings">Settings</string>
+    
+    <!-- Control Screen -->
+    <string name="power_control">Power Control</string>
+    <string name="power_on">Power ON</string>
+    <string name="power_off">Power OFF</string>
+    <string name="led_control">LED Control</string>
+    <string name="brightness">Brightness</string>
+    <string name="color">Color</string>
+    <string name="sound_control">Sound Control</string>
+    <string name="volume">Volume</string>
+    <string name="tone">Tone</string>
+    <string name="vibration_control">Vibration Control</string>
+    <string name="intensity">Intensity</string>
+    
+    <!-- Scan Screen -->
+    <string name="scan_title">Scan for Devices</string>
+    <string name="scan_button">Start Scan</string>
+    <string name="scanning">Scanning…</string>
+    <string name="no_devices_found">No devices found</string>
+    <string name="scan_complete">Scan complete</string>
+    
+    <!-- Therapy Modes -->
+    <string name="therapy_modes">Therapy Modes</string>
+    <string name="calm_mode">Calm Mode</string>
+    <string name="focus_mode">Focus Mode</string>
+    <string name="sensory_play_mode">Sensory Play</string>
+    <string name="sleep_aid_mode">Sleep Aid</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Safety Settings</string>
+    <string name="distance_limit">Distance Limit</string>
+    <string name="min_rssi">Minimum Signal Strength (RSSI)</string>
+    <string name="auto_shutoff">Auto Shut-off</string>
+    <string name="save_button">Save Settings</string>
+    
+    <!-- Safety -->
+    <string name="distance_warning">Device too far! Auto shut-off activated</string>
+    <string name="connection_lost">Connection lost</string>
+    <string name="reconnecting">Reconnecting…</string>
+    
+    <!-- Status -->
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connecting">Connecting…</string>
+    
+    <!-- Errors -->
+    <string name="error_bluetooth_not_supported">Bluetooth is not supported on this device</string>
+    <string name="error_bluetooth_disabled">Bluetooth is disabled</string>
+    <string name="error_permissions_required">Permissions are required for the app to function</string>
+    <string name="error_connection_failed">Connection failed</string>
+    <string name="error_service_not_found">Service not found on device</string>
+</resources>

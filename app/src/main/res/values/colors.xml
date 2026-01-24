@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Soft, Calming Color Palette for Sensory Control -->
+    
+    <!-- Primary Colors - Soft Teal/Turquoise (Calming) -->
+    <color name="primary">#4DB6AC</color>
+    <color name="primary_dark">#00897B</color>
+    <color name="primary_light">#80CBC4</color>
+    
+    <!-- Accent Color - Soft Coral (Warm, Friendly) -->
+    <color name="accent">#FF8A80</color>
+    <color name="accent_dark">#FF5252</color>
+    
+    <!-- Background Colors -->
+    <color name="background">#FAFAFA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#F5F5F5</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_hint">#BDBDBD</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    
+    <!-- Status Colors -->
+    <color name="status_normal">#66BB6A</color>
+    <color name="status_warning">#FFA726</color>
+    <color name="status_danger">#EF5350</color>
+    
+    <!-- Connection Status Colors -->
+    <color name="status_connected">#66BB6A</color>
+    <color name="status_connecting">#FFA726</color>
+    <color name="status_disconnected">#BDBDBD</color>
+    
+    <!-- Alert Colors -->
+    <color name="alert_critical">#EF5350</color>
+    <color name="alert_high">#FF7043</color>
+    <color name="alert_medium">#FFCA28</color>
+    
+    <!-- Splash Screen -->
+    <color name="splash_background">#FFFFFF</color>
+    <color name="splash_text">#4DB6AC</color>
+</resources>

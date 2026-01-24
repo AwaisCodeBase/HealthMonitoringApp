@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "680374870007",
+    "project_id": "childcareapp-3ec18",
+    "storage_bucket": "childcareapp-3ec18.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680374870007:android:3c44411a8012eae0d258f2",
+        "android_client_info": {
+          "package_name": "com.example.sensorycontrol"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAphN4s-afxMGvg2CICN196Zh4pXsXRy-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
