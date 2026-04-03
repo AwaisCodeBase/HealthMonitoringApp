@@ -6,8 +6,13 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.example.sensorycontrol.fragments.DashboardFragment"
+        android:name="com.example.sensorycontrol.fragments.ModernDashboardFragment"
         android:label="Dashboard" />
+    
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.sensorycontrol.fragments.HistoryFragment"
+        android:label="History" />
 
     <fragment
         android:id="@+id/monitoringFragment"

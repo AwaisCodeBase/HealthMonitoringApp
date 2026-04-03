@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sensory Control</string>
+    <string name="app_name">Child Health Monitor</string>
     
     <!-- Firebase Google Sign-In Web Client ID -->
     <!-- This is automatically generated from google-services.json by the Google Services plugin -->
@@ -15,47 +15,46 @@
     <string name="default_web_client_id" translatable="false">680374870007-YOUR_CLIENT_ID.apps.googleusercontent.com</string>
     
     <!-- Navigation -->
-    <string name="nav_control">Control</string>
+    <string name="nav_control">Dashboard</string>
     <string name="nav_scan">Scan</string>
-    <string name="nav_modes">Modes</string>
+    <string name="nav_modes">Monitor</string>
     <string name="nav_settings">Settings</string>
     
-    <!-- Control Screen -->
-    <string name="power_control">Power Control</string>
-    <string name="power_on">Power ON</string>
-    <string name="power_off">Power OFF</string>
-    <string name="led_control">LED Control</string>
-    <string name="brightness">Brightness</string>
-    <string name="color">Color</string>
-    <string name="sound_control">Sound Control</string>
-    <string name="volume">Volume</string>
-    <string name="tone">Tone</string>
-    <string name="vibration_control">Vibration Control</string>
-    <string name="intensity">Intensity</string>
+    <!-- Dashboard Screen -->
+    <string name="health_dashboard">Health Dashboard</string>
+    <string name="connection_status">Connection Status</string>
+    <string name="connect_device">Connect to Device</string>
+    <string name="disconnect_device">Disconnect</string>
+    <string name="health_status">Health Status</string>
+    <string name="heart_rate">Heart Rate</string>
+    <string name="blood_oxygen">Blood Oxygen</string>
+    <string name="body_temperature">Body Temperature</string>
     
     <!-- Scan Screen -->
-    <string name="scan_title">Scan for Devices</string>
+    <string name="scan_title">Find Health Monitor</string>
     <string name="scan_button">Start Scan</string>
     <string name="scanning">Scanning…</string>
     <string name="no_devices_found">No devices found</string>
     <string name="scan_complete">Scan complete</string>
+    <string name="device_name">ChildHealthWearable</string>
     
-    <!-- Therapy Modes -->
-    <string name="therapy_modes">Therapy Modes</string>
-    <string name="calm_mode">Calm Mode</string>
-    <string name="focus_mode">Focus Mode</string>
-    <string name="sensory_play_mode">Sensory Play</string>
-    <string name="sleep_aid_mode">Sleep Aid</string>
+    <!-- Health Monitoring -->
+    <string name="monitoring_title">Real-time Monitoring</string>
+    <string name="vital_signs">Vital Signs</string>
+    <string name="health_history">Health History</string>
     
     <!-- Settings -->
-    <string name="settings_title">Safety Settings</string>
-    <string name="distance_limit">Distance Limit</string>
-    <string name="min_rssi">Minimum Signal Strength (RSSI)</string>
-    <string name="auto_shutoff">Auto Shut-off</string>
+    <string name="settings_title">Health Thresholds</string>
+    <string name="threshold_settings">Configure alert thresholds for child safety</string>
+    <string name="heart_rate_threshold">Heart Rate Threshold</string>
+    <string name="spo2_threshold">Blood Oxygen Threshold</string>
+    <string name="temperature_threshold">Temperature Threshold</string>
     <string name="save_button">Save Settings</string>
     
-    <!-- Safety -->
-    <string name="distance_warning">Device too far! Auto shut-off activated</string>
+    <!-- Safety & Alerts -->
+    <string name="health_alert">Health Alert</string>
+    <string name="critical_condition">Critical condition detected</string>
+    <string name="warning_condition">Warning: Vital signs need attention</string>
     <string name="connection_lost">Connection lost</string>
     <string name="reconnecting">Reconnecting…</string>
     

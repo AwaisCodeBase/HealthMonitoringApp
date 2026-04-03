@@ -34,8 +34,8 @@ android {
     }
     
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     
     buildFeatures {
@@ -77,6 +77,12 @@ dependencies {
     
     // Google Sign-In
     implementation("com.google.android.gms:play-services-auth:21.0.0")
+    
+    // WebSocket client for WiFi communication
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    
+    // JSON parsing
+    implementation("com.google.code.gson:gson:2.10.1")
     
     // Testing
     testImplementation(libs.junit)
