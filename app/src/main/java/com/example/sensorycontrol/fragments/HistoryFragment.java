@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sensorycontrol.R;
 import com.example.sensorycontrol.adapters.HealthRecordAdapter;
-import com.example.sensorycontrol.database.HealthRecordEntity;
+import com.example.sensorycontrol.repository.FirestoreHealthRepository;
 import com.example.sensorycontrol.utils.ChartHelper;
 import com.example.sensorycontrol.utils.ExportHelper;
 import com.example.sensorycontrol.utils.StatisticsHelper;
-import com.example.sensorycontrol.viewmodels.HealthMonitorViewModel;
+import com.example.sensorycontrol.viewmodels.HealthMonitorViewModelWifi;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.LineData;
 import com.google.android.material.button.MaterialButton;
@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class HistoryFragment extends Fragment {
     
-    private HealthMonitorViewModel viewModel;
+    private HealthMonitorViewModelWifi viewModel;
     private HealthRecordAdapter adapter;
     
     // UI Components
@@ -109,7 +109,7 @@ public class HistoryFragment extends Fragment {
     }
     
     private void setupViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(HealthMonitorViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(HealthMonitorViewModelWifi.class);
     }
     
     private void setupRecyclerView() {
@@ -185,7 +185,7 @@ public class HistoryFragment extends Fragment {
         });
     }
     
-    private void updateUI(List<HealthRecordEntity> records) {
+    private void updateUI(List<FirestoreHealthRepository.HealthRecordFirestore> records) {
         // Update charts
         updateCharts(records);
         
@@ -196,7 +196,7 @@ public class HistoryFragment extends Fragment {
         adapter.setRecords(records);
     }
     
-    private void updateCharts(List<HealthRecordEntity> records) {
+    private void updateCharts(List<FirestoreHealthRepository.HealthRecordFirestore> records) {
         boolean showDate = currentRange != TimeRange.HOURS_24;
         
         // Heart Rate Chart
@@ -212,7 +212,7 @@ public class HistoryFragment extends Fragment {
         ChartHelper.updateChart(chartTemperature, tempData, records, showDate);
     }
     
-    private void updateStatistics(List<HealthRecordEntity> records) {
+    private void updateStatistics(List<FirestoreHealthRepository.HealthRecordFirestore> records) {
         // Calculate statistics
         StatisticsHelper.VitalStatistics hrStats = 
             StatisticsHelper.calculateHeartRateStats(records);
@@ -244,7 +244,7 @@ public class HistoryFragment extends Fragment {
     }
     
     private void exportData() {
-        List<HealthRecordEntity> records = adapter.getRecords();
+        List<FirestoreHealthRepository.HealthRecordFirestore> records = adapter.getRecords();
         if (records == null || records.isEmpty()) {
             Toast.makeText(getContext(), "No data to export", Toast.LENGTH_SHORT).show();
             return;

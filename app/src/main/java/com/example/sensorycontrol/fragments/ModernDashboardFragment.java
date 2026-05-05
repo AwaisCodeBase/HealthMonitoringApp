@@ -20,9 +20,13 @@ import androidx.navigation.Navigation;
 
 import com.example.sensorycontrol.R;
 import com.example.sensorycontrol.models.HealthStatus;
-import com.example.sensorycontrol.viewmodels.HealthMonitorViewModel;
+import com.example.sensorycontrol.viewmodels.HealthMonitorViewModelWifi;
+import com.example.sensorycontrol.wifi.WifiHealthMonitorManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textfield.TextInputEditText;
+import android.app.AlertDialog;
+import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +38,8 @@ import java.util.Locale;
  */
 public class ModernDashboardFragment extends Fragment {
     
-    private HealthMonitorViewModel viewModel;
+    private HealthMonitorViewModelWifi viewModel;
+    private String deviceIpAddress = "192.168.1.100"; // Default IP
     
     // UI Components
     private View statusDotLarge;
@@ -117,7 +122,7 @@ public class ModernDashboardFragment extends Fragment {
     }
     
     private void setupViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(HealthMonitorViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(HealthMonitorViewModelWifi.class);
     }
     
     private void setupAnimations() {
@@ -133,7 +138,8 @@ public class ModernDashboardFragment extends Fragment {
             if (viewModel.isConnected()) {
                 viewModel.disconnect();
             } else {
-                viewModel.startScan();
+                // Show IP address input dialog
+                showIpAddressDialog();
             }
         });
         
@@ -141,6 +147,26 @@ public class ModernDashboardFragment extends Fragment {
             // Navigate to history
             Navigation.findNavController(v).navigate(R.id.historyFragment);
         });
+    }
+    
+    private void showIpAddressDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Enter ESP32 IP Address");
+        
+        final EditText input = new EditText(requireContext());
+        input.setText(deviceIpAddress);
+        input.setHint("192.168.1.100");
+        builder.setView(input);
+        
+        builder.setPositiveButton("Connect", (dialog, which) -> {
+            deviceIpAddress = input.getText().toString().trim();
+            if (!deviceIpAddress.isEmpty()) {
+                viewModel.connect(deviceIpAddress);
+            }
+        });
+        
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
     }
     
     private void observeData() {
@@ -185,13 +211,14 @@ public class ModernDashboardFragment extends Fragment {
         });
     }
     
-    private void updateConnectionStatus(com.example.sensorycontrol.ble.HealthMonitorBleManager.ConnectionState state) {
+    private void updateConnectionStatus(WifiHealthMonitorManager.ConnectionState state) {
         switch (state) {
             case CONNECTED:
-                tvConnectionBadge.setText("Connected");
+                tvConnectionBadge.setText("Connected (WiFi)");
                 connectionIndicator.setBackgroundResource(R.drawable.bg_status_dot_good);
                 btnStartMonitoring.setText("Disconnect");
                 btnStartMonitoring.setIcon(getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel, null));
+                btnStartMonitoring.setEnabled(true);
                 
                 // Start heart pulse animation
                 if (ivHeartPulse != null) {
@@ -199,10 +226,10 @@ public class ModernDashboardFragment extends Fragment {
                 }
                 break;
                 
-            case SCANNING:
-                tvConnectionBadge.setText("Scanning...");
+            case CONNECTING:
+                tvConnectionBadge.setText("Connecting...");
                 connectionIndicator.setBackgroundResource(R.drawable.bg_status_dot_warning);
-                btnStartMonitoring.setText("Scanning...");
+                btnStartMonitoring.setText("Connecting...");
                 btnStartMonitoring.setEnabled(false);
                 break;
                 
@@ -211,6 +238,18 @@ public class ModernDashboardFragment extends Fragment {
                 connectionIndicator.setBackgroundResource(R.drawable.bg_status_dot_warning);
                 btnStartMonitoring.setText("Connect Device");
                 btnStartMonitoring.setIcon(getResources().getDrawable(android.R.drawable.ic_menu_search, null));
+                btnStartMonitoring.setEnabled(true);
+                
+                // Stop heart pulse animation
+                if (ivHeartPulse != null) {
+                    ivHeartPulse.clearAnimation();
+                }
+                break;
+                
+            case ERROR:
+                tvConnectionBadge.setText("Connection Error");
+                connectionIndicator.setBackgroundResource(R.drawable.bg_status_dot_critical);
+                btnStartMonitoring.setText("Retry Connection");
                 btnStartMonitoring.setEnabled(true);
                 
                 // Stop heart pulse animation

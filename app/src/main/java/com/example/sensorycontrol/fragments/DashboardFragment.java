@@ -22,9 +22,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.sensorycontrol.R;
 import com.example.sensorycontrol.activities.LoginActivity;
 import com.example.sensorycontrol.auth.AuthManager;
-import com.example.sensorycontrol.ble.HealthMonitorBleManager;
+import com.example.sensorycontrol.wifi.WifiHealthMonitorManager;
 import com.example.sensorycontrol.models.HealthStatus;
-import com.example.sensorycontrol.viewmodels.HealthMonitorViewModel;
+import com.example.sensorycontrol.viewmodels.HealthMonitorViewModelWifi;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
@@ -33,7 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class DashboardFragment extends Fragment {
     
-    private HealthMonitorViewModel viewModel;
+    private HealthMonitorViewModelWifi viewModel;
     
     // UI Components
     private TextView welcomeText;
@@ -66,7 +66,7 @@ public class DashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         
         // Initialize ViewModel
-        viewModel = new ViewModelProvider(requireActivity()).get(HealthMonitorViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(HealthMonitorViewModelWifi.class);
         
         // Initialize views
         initializeViews(view);
