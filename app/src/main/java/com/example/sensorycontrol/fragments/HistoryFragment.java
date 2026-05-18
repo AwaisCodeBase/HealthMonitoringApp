@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sensorycontrol.R;
 import com.example.sensorycontrol.adapters.HealthRecordAdapter;
+import com.example.sensorycontrol.database.HealthRecordEntity;
 import com.example.sensorycontrol.repository.FirestoreHealthRepository;
 import com.example.sensorycontrol.utils.ChartHelper;
 import com.example.sensorycontrol.utils.ExportHelper;
@@ -192,36 +193,42 @@ public class HistoryFragment extends Fragment {
         // Update statistics
         updateStatistics(records);
         
-        // Update list
-        adapter.setRecords(records);
+        // Update list - convert Firestore records to Entity records for adapter
+        adapter.setRecords(FirestoreHealthRepository.toEntityList(records));
     }
     
     private void updateCharts(List<FirestoreHealthRepository.HealthRecordFirestore> records) {
         boolean showDate = currentRange != TimeRange.HOURS_24;
         
+        // Convert Firestore records to Entity records for chart helpers
+        List<HealthRecordEntity> entityRecords = FirestoreHealthRepository.toEntityList(records);
+        
         // Heart Rate Chart
-        LineData hrData = ChartHelper.createHeartRateData(records);
-        ChartHelper.updateChart(chartHeartRate, hrData, records, showDate);
+        LineData hrData = ChartHelper.createHeartRateData(entityRecords);
+        ChartHelper.updateChart(chartHeartRate, hrData, entityRecords, showDate);
         
         // SpO2 Chart
-        LineData spo2Data = ChartHelper.createSpO2Data(records);
-        ChartHelper.updateChart(chartSpO2, spo2Data, records, showDate);
+        LineData spo2Data = ChartHelper.createSpO2Data(entityRecords);
+        ChartHelper.updateChart(chartSpO2, spo2Data, entityRecords, showDate);
         
         // Temperature Chart
-        LineData tempData = ChartHelper.createTemperatureData(records);
-        ChartHelper.updateChart(chartTemperature, tempData, records, showDate);
+        LineData tempData = ChartHelper.createTemperatureData(entityRecords);
+        ChartHelper.updateChart(chartTemperature, tempData, entityRecords, showDate);
     }
     
     private void updateStatistics(List<FirestoreHealthRepository.HealthRecordFirestore> records) {
+        // Convert Firestore records to Entity records for statistics helpers
+        List<HealthRecordEntity> entityRecords = FirestoreHealthRepository.toEntityList(records);
+        
         // Calculate statistics
         StatisticsHelper.VitalStatistics hrStats = 
-            StatisticsHelper.calculateHeartRateStats(records);
+            StatisticsHelper.calculateHeartRateStats(entityRecords);
         StatisticsHelper.VitalStatistics spo2Stats = 
-            StatisticsHelper.calculateSpO2Stats(records);
+            StatisticsHelper.calculateSpO2Stats(entityRecords);
         StatisticsHelper.TemperatureStatistics tempStats = 
-            StatisticsHelper.calculateTemperatureStats(records);
+            StatisticsHelper.calculateTemperatureStats(entityRecords);
         StatisticsHelper.StatusDistribution statusDist = 
-            StatisticsHelper.calculateStatusDistribution(records);
+            StatisticsHelper.calculateStatusDistribution(entityRecords);
         
         // Update UI
         tvHrStats.setText(String.format(java.util.Locale.US,
@@ -244,7 +251,7 @@ public class HistoryFragment extends Fragment {
     }
     
     private void exportData() {
-        List<FirestoreHealthRepository.HealthRecordFirestore> records = adapter.getRecords();
+        List<HealthRecordEntity> records = adapter.getRecords();
         if (records == null || records.isEmpty()) {
             Toast.makeText(getContext(), "No data to export", Toast.LENGTH_SHORT).show();
             return;

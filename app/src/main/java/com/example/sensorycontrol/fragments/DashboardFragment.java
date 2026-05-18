@@ -1,7 +1,5 @@
 package com.example.sensorycontrol.fragments;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,11 +8,13 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,9 +27,11 @@ import com.example.sensorycontrol.models.HealthStatus;
 import com.example.sensorycontrol.viewmodels.HealthMonitorViewModelWifi;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Map;
+
 /**
  * Dashboard - Shows real-time health data with three-dot status indicator
- * Phase 5 Implementation
+ * Updated for WiFi Implementation
  */
 public class DashboardFragment extends Fragment {
     
@@ -137,14 +139,10 @@ public class DashboardFragment extends Fragment {
         });
         
         // Observe connection state
-        viewModel.getConnectionState().observe(getViewLifecycleOwner(), state -> {
-            updateConnectionStatus(state);
-        });
+        viewModel.getConnectionState().observe(getViewLifecycleOwner(), this::updateConnectionStatus);
         
         // Observe health status
-        viewModel.getHealthStatus().observe(getViewLifecycleOwner(), status -> {
-            updateHealthIndicator(status);
-        });
+        viewModel.getHealthStatus().observe(getViewLifecycleOwner(), this::updateHealthIndicator);
         
         // Observe errors
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
@@ -156,38 +154,56 @@ public class DashboardFragment extends Fragment {
     }
     
     private void setupButtons() {
-        connectButton.setOnClickListener(v -> {
-            if (!viewModel.isBluetoothEnabled()) {
-                Toast.makeText(requireContext(), "Please enable Bluetooth", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            viewModel.startScan();
-            Toast.makeText(requireContext(), "Scanning for device...", Toast.LENGTH_SHORT).show();
-        });
+        connectButton.setOnClickListener(v -> showConnectDialog());
         
         disconnectButton.setOnClickListener(v -> {
             viewModel.disconnect();
             Toast.makeText(requireContext(), "Disconnected", Toast.LENGTH_SHORT).show();
         });
         
-        logoutButton.setOnClickListener(v -> {
-            performLogout();
+        logoutButton.setOnClickListener(v -> performLogout());
+    }
+
+    /**
+     * Show dialog to enter ESP32 IP address
+     */
+    private void showConnectDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Connect to Device");
+        
+        final EditText input = new EditText(requireContext());
+        input.setHint("Enter IP Address (e.g. 192.168.1.100)");
+        
+        // Pre-fill with last used IP if available
+        String lastIp = viewModel.getDeviceIpAddress().getValue();
+        if (lastIp != null) {
+            input.setText(lastIp);
+        }
+        
+        builder.setView(input);
+        
+        builder.setPositiveButton("Connect", (dialog, which) -> {
+            String ip = input.getText().toString().trim();
+            if (!ip.isEmpty()) {
+                viewModel.connect(ip);
+                Toast.makeText(requireContext(), "Connecting to " + ip, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), "Please enter an IP address", Toast.LENGTH_SHORT).show();
+            }
         });
+        
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
     }
     
-    private void updateConnectionStatus(HealthMonitorBleManager.ConnectionState state) {
+    private void updateConnectionStatus(WifiHealthMonitorManager.ConnectionState state) {
+        if (state == null) return;
+        
         switch (state) {
             case DISCONNECTED:
                 connectionStatusText.setText("Not connected");
                 connectionStatusText.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark));
                 connectButton.setEnabled(true);
-                disconnectButton.setEnabled(false);
-                break;
-                
-            case SCANNING:
-                connectionStatusText.setText("Scanning...");
-                connectionStatusText.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_orange_dark));
-                connectButton.setEnabled(false);
                 disconnectButton.setEnabled(false);
                 break;
                 
@@ -209,6 +225,13 @@ public class DashboardFragment extends Fragment {
                 connectionStatusText.setText("Disconnecting...");
                 connectionStatusText.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_orange_dark));
                 connectButton.setEnabled(false);
+                disconnectButton.setEnabled(false);
+                break;
+
+            case ERROR:
+                connectionStatusText.setText("Connection Error");
+                connectionStatusText.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark));
+                connectButton.setEnabled(true);
                 disconnectButton.setEnabled(false);
                 break;
         }
@@ -287,7 +310,7 @@ public class DashboardFragment extends Fragment {
         if (user != null) {
             authManager.getUserProfile(new AuthManager.ProfileCallback() {
                 @Override
-                public void onSuccess(java.util.Map<String, Object> profile) {
+                public void onSuccess(Map<String, Object> profile) {
                     String name = (String) profile.get("name");
                     if (name != null && !name.isEmpty()) {
                         welcomeText.setText("Welcome, " + name + "!");

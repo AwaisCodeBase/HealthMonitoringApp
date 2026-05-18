@@ -450,6 +450,21 @@ public class FirestoreHealthRepository {
         public String getUserId() { return userId; }
         public void setUserId(String userId) { this.userId = userId; }
         
+        /**
+         * Convert this Firestore record to a Room Entity.
+         * Useful for compatibility with existing adapters and utilities.
+         * 
+         * @return HealthRecordEntity with the same data
+         */
+        public com.example.sensorycontrol.database.HealthRecordEntity toEntity() {
+            com.example.sensorycontrol.database.HealthRecordEntity entity = 
+                new com.example.sensorycontrol.database.HealthRecordEntity(
+                    timestamp, heartRate, spO2, temperature, healthStatus, userId
+                );
+            // Note: Room auto-generates ID, so we don't set it
+            return entity;
+        }
+        
         @Override
         public String toString() {
             return "HealthRecordFirestore{" +
@@ -462,5 +477,20 @@ public class FirestoreHealthRepository {
                     ", userId='" + userId + '\'' +
                     '}';
         }
+    }
+    
+    /**
+     * Utility method to convert a list of Firestore records to Entity records.
+     * 
+     * @param firestoreRecords List of Firestore records
+     * @return List of Room Entity records
+     */
+    public static List<com.example.sensorycontrol.database.HealthRecordEntity> toEntityList(
+            List<HealthRecordFirestore> firestoreRecords) {
+        List<com.example.sensorycontrol.database.HealthRecordEntity> entities = new ArrayList<>();
+        for (HealthRecordFirestore record : firestoreRecords) {
+            entities.add(record.toEntity());
+        }
+        return entities;
     }
 }
